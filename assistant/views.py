@@ -10,6 +10,7 @@ from assistant.models import Timetable, EnrollmentRecord, Group
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 
+
 # /assistant/266593/
 def student(request, student_id):
     student_timetable = Timetable.objects.get(student_id=student_id)

@@ -21,6 +21,10 @@ class Student(models.Model):
     average = models.FloatField(default=0)
 
 
+class UniWorker(models.Model):
+    name = models.CharField(max_length=50)
+
+
 class FieldOfStudies(models.Model):
     name = models.CharField(max_length=30)
 
@@ -30,11 +34,16 @@ class Studying(models.Model):
     field_of_study = models.ForeignKey(FieldOfStudies, on_delete=models.CASCADE)
 
 
+# siatka zajec
 class EnrollmentEdition(models.Model):
     # Change this to string
     academic_year = models.CharField(max_length=15)
     semester = models.IntegerField()
     field_of_studies = models.ForeignKey(FieldOfStudies, on_delete=models.CASCADE)
+
+
+class GridModification(models.Model):
+    enrollment_edition = models.ForeignKey(EnrollmentEdition, on_delete=models.CASCADE)
 
 
 class Timetable(models.Model):
@@ -132,6 +141,19 @@ class Preference(models.Model):
     priority = models.IntegerField(default=0)
 
 
+class EnrollmentQueue(models.Model):
+    enrollment_edition = models.ForeignKey(EnrollmentEdition, on_delete=models.CASCADE)
 
 
+class EnrollmentPermission(models.Model):
+    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    queue_id = models.ForeignKey(EnrollmentQueue, on_delete=models.CASCADE)
+    is_permitted = models.BooleanField(default=False)
+    date_from = models.DateTimeField()
+    date_to = models.DateTimeField()
+    is_permitted_earlier = models.BooleanField(default=False)
 
+
+class QueueModification(models.Model):
+    queue_id = models.ForeignKey(EnrollmentQueue, on_delete=models.CASCADE)
+    worker_id = models.ForeignKey(UniWorker, on_delete=models.CASCADE)
