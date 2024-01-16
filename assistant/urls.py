@@ -1,8 +1,8 @@
 from django.urls import path
 
 from . import views
+from .views import GeneratePlanController
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("<int:student_id>/", views.student, name="student")
+    path("<int:student_id>/", GeneratePlanController.student, name="student")
 ]
