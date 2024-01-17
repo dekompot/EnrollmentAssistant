@@ -26,6 +26,7 @@ class UniWorker(models.Model):
 
 
 class FieldOfStudies(models.Model):
+    id = models.CharField(max_length=30, primary_key=True)
     name = models.CharField(max_length=30)
 
 
@@ -37,6 +38,7 @@ class Studying(models.Model):
 # siatka zajec
 class EnrollmentEdition(models.Model):
     # Change this to string
+    id = models.CharField(max_length=30, primary_key=True)
     academic_year = models.CharField(max_length=15)
     semester = models.IntegerField()
     field_of_studies = models.ForeignKey(FieldOfStudies, on_delete=models.CASCADE)
@@ -52,8 +54,8 @@ class Timetable(models.Model):
 
 # Add name here!
 class CourseGroup(models.Model):
+    code = models.CharField(max_length=20, primary_key=True)
     name = models.CharField(max_length=20)
-    number_of_choices = models.IntegerField()
 
 
 class CourseType(models.TextChoices):
@@ -84,7 +86,7 @@ class Course(models.Model):
     code = models.CharField(max_length=20, primary_key=True)
     name = models.CharField(max_length=50)
     ECTS = models.IntegerField()
-    course_group = models.ForeignKey(CourseGroup, on_delete=models.CASCADE)
+    course_group = models.ForeignKey(CourseGroup, on_delete=models.CASCADE, blank=True, null=True)
     course_type = models.CharField(max_length=3, choices=CourseType, default=CourseType.LECTURE)
 
 
@@ -157,3 +159,10 @@ class EnrollmentPermission(models.Model):
 class QueueModification(models.Model):
     queue_id = models.ForeignKey(EnrollmentQueue, on_delete=models.CASCADE)
     worker_id = models.ForeignKey(UniWorker, on_delete=models.CASCADE)
+
+
+class Exchange(models.Model):
+    enrollment_record_from = models.ForeignKey(EnrollmentRecord, related_name='exchange_from_set',
+                                               on_delete=models.CASCADE)
+    enrollment_record_to = models.ForeignKey(EnrollmentRecord, related_name='exchange_to_set', on_delete=models.CASCADE, blank=True, null=True)
+    succeeded = models.BooleanField(default=False)
