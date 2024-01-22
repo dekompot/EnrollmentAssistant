@@ -1,17 +1,39 @@
-import os
-
-from django.template.backends import django
 from django.test import TestCase
 
 from parsing.parse_json import load_grid_from_json
+from assistant.models import *
 
 
+class TestLoadingFromJson(TestCase):
 
+    def test_load_grid_from_json(self):
 
-# Create your tests here.
-if __name__ == '__main__':
+        field_of_study = FieldOfStudies(id='CBE-2021-inz', name='Cyberbezpieczenstwo')
+        student = Student(id='266640', name='Kacper Bartocha', average=4.5)
 
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myproject.settings")
-    django.settings.configure()
+        enrollment_edition = EnrollmentEdition(id='summer-2022/2023', academic_year='2022/2023',
+                                               semester=4, field_of_studies=field_of_study)
 
-    load_grid_from_json(enrollment_edition_id='summer-2022/2023', file='assistant/data/plan_kacpra.json', save_to_db=False)
+        field_of_study.save()
+        student.save()
+        enrollment_edition.save()
+
+        load_grid_from_json(enrollment_edition_id=enrollment_edition.id,
+                            file='assistant/data/plan_kacpra.json')
+
+    def test_sign_up_student(self):
+
+        field_of_study = FieldOfStudies(id='CBE-2021-inz', name='Cyberbezpieczenstwo')
+        student = Student(id='266640', name='Kacper Bartocha', average=4.5)
+
+        enrollment_edition = EnrollmentEdition(id='summer-2022/2023', academic_year='2022/2023',
+                                               semester=4, field_of_studies=field_of_study)
+
+        field_of_study.save()
+        student.save()
+        enrollment_edition.save()
+
+        load_grid_from_json(enrollment_edition_id=enrollment_edition.id,
+                            file='assistant/data/plan_kacpra.json')
+
+        timetable = Timetable(enrollment_edition_id=enrollment_edition, student_id=student)

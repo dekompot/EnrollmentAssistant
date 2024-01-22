@@ -85,6 +85,7 @@ class GridModification(models.Model):
 
 
 class Timetable(models.Model):
+    enrollment_edition = models.ForeignKey(EnrollmentEdition, primary_key=True, on_delete=models.CASCADE)
     student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
 
     def __str__(self):

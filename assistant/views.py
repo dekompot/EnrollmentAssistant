@@ -16,7 +16,7 @@ class GeneratePlanController:
         except Timetable.DoesNotExist:
             raise Http404("Question does not exist")
 
-        enrollment_records = EnrollmentRecord.objects.filter(timetable=student_timetable.id).all()
+        enrollment_records = EnrollmentRecord.objects.filter(timetable=student_timetable).all()
 
         context = {
             'student_groups': [enr.group_code for enr in enrollment_records]

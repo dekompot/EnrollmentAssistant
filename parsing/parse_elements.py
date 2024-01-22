@@ -47,6 +47,17 @@ def parse_teacher(teacher: str) -> Teacher:
     return Teacher(name=matched_elements.group("name"), title=matched_elements.group("title"))
 
 
+def create_teacher(teacher: str) -> Teacher:
+    teacher = parse_teacher(teacher)
+
+    filtered_teachers = Teacher.objects.filter(name=teacher.name, title=teacher.title)
+    if not filtered_teachers:
+        teacher.save()
+    else:
+        teacher = filtered_teachers[0]
+    return teacher
+
+
 def group_factory(code: str, date_and_place: str, enrollment_edition: EnrollmentEdition, course: Course):
     day_of_week, type_of_week, start_time, end_time, building, hall = parse_date_and_place(date_and_place)
 
