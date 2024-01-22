@@ -1,7 +1,7 @@
 import json
 
-from assistant.models import Course, CourseGroup, EnrollmentEdition, FieldOfStudies
-from parsing.parse_elements import group_factory, map_form_of_classes
+from assistant.models import Course, CourseGroup, EnrollmentEdition, FieldOfStudies, Teacher, Lecturing
+from parsing.parse_elements import group_factory, map_form_of_classes, parse_teacher
 
 
 def load_from_file(file: str):
@@ -9,22 +9,23 @@ def load_from_file(file: str):
         return json.load(f)
 
 
-def load_from_json(file: str, save_to_db: bool = False):
+def load_grid_from_json(enrollment_edition_id: str, file: str, save_to_db: bool = False):
     courses = []
+    teachers = []
 
-    field_of_studies = FieldOfStudies(id='CBE-2022', name='Cyberbezpieczenstwo')
-    enrollment_edition = EnrollmentEdition(id='1', academic_year='2022/2023', semester=3)
-
-    if save_to_db:
-        field_of_studies.save()
-        enrollment_edition.save()
+    enrollment_edition = EnrollmentEdition.objects.get(id=enrollment_edition_id)
 
     loaded_json = load_from_file(file)
     print(json.dumps(loaded_json, indent=4))
 
     for loaded_course in loaded_json['courses']:
-        course_group = CourseGroup(name=loaded_course['name'], number_of_choices=1)
+        course_group = CourseGroup(code=loaded_course['code'], name=loaded_course['name'])
         course_type = map_form_of_classes(loaded_course['code'])
+
+        teachers = [parse_teacher(group['lecturer']) for group in loaded_course['groups']]
+
+        # lecturing = Lecturing(teacher_id=teacher.id, course_id=course_group)
+
         course = Course(code=loaded_course['code'], name=loaded_course['name'], ECTS=0,
                         course_group=course_group, course_type=course_type)
         courses.append(course)
@@ -33,12 +34,15 @@ def load_from_json(file: str, save_to_db: bool = False):
                          for group in loaded_course['groups']]
 
         if save_to_db:
+            # lecturing.save()
             course_group.save()
             course.save()
             for group in course_groups:
                 group.save()
 
-    return courses
+            for teacher in teachers:
+                if not Teacher.objects.filter(name=teacher.name, title=teacher.title):
+                    teacher.id = Teacher.objects.last().id + 1
+                    teacher.save()
 
-if __name__ == '__main__':
-    load_from_json('assistant/data/plan_kacpra.json')
+    return courses
