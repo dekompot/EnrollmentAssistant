@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Plan View</h1>
+    {% if groups %}
+        <ul>
+        {% for group in groups %}
+            <li>
+                {{ group.code }} takes place {{ group.start_time }} to {{ group.end_time }}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+    <p>No groups are available.</p>
+  {% endif %}
+</body>
+</html>

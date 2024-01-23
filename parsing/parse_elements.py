@@ -27,6 +27,14 @@ MAP_POLISH_ABBR_FORM = {
                    'P': CourseType.PROJECT
 }
 
+MAP_AVAILABLE_SEATS = {
+    "Lab" : 15,
+    "Pra" : 30,
+    "Lec" : 230,
+    "Sem" : 15,
+    "Pro" : 15
+}
+
 
 def parse_date_and_place(date_and_place: str) -> Tuple[DayOfWeek, WeekType, datetime, datetime, str, str]:
     match = PLACE_AND_DATE_REGEX.match(date_and_place)
@@ -62,4 +70,4 @@ def group_factory(code: str, date_and_place: str, enrollment_edition: Enrollment
     day_of_week, type_of_week, start_time, end_time, building, hall = parse_date_and_place(date_and_place)
 
     return Group(code=code, enrollment_edition=enrollment_edition, course=course, day_of_week=day_of_week, week_type=type_of_week,
-                 start_time=start_time, end_time=end_time, building=building, hall=hall)
+                 start_time=start_time, end_time=end_time, building=building, hall=hall, available_seats=MAP_AVAILABLE_SEATS[course.course_type])

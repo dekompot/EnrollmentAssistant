@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+from assistant.enrollment.enrollment import Enrollment
 from parsing.parse_json import load_grid_from_json
 from assistant.models import *
 
@@ -36,4 +37,16 @@ class TestLoadingFromJson(TestCase):
         load_grid_from_json(enrollment_edition_id=enrollment_edition.id,
                             file='assistant/data/plan_kacpra.json')
 
-        timetable = Timetable(enrollment_edition_id=enrollment_edition, student_id=student)
+        timetable = Timetable(enrollment_edition=enrollment_edition, student=student)
+        timetable.save()
+
+        group_ids_to_enroll = ['K05-67j', 'K02-82a', 'K02-75d', 'K02-73d']
+        groups = Group.objects.filter(code__in=group_ids_to_enroll).all()
+
+        enrollment = Enrollment(enrollment_edition=enrollment_edition)
+
+        for group in groups:
+            enrollment.register(student, group)
+
+
+

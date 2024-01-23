@@ -15,7 +15,7 @@ def load_grid_from_json(enrollment_edition_id: str, file: str):
     enrollment_edition = EnrollmentEdition.objects.get(id=enrollment_edition_id)
 
     loaded_json = load_from_file(file)
-    print(json.dumps(loaded_json, indent=4))
+    # print(json.dumps(loaded_json, indent=4))
 
     for loaded_course in loaded_json['courses']:
         course_group = CourseGroup(code=loaded_course['code'], name=loaded_course['name'])
@@ -32,7 +32,7 @@ def load_grid_from_json(enrollment_edition_id: str, file: str):
                                        enrollment_edition=enrollment_edition, course=course)
                          for group in loaded_course['groups']]
 
-        lecturings = [Lecturing(teacher_id=teacher, group_code=group)
+        lecturings = [Lecturing(teacher=teacher, group=group)
                       for (teacher, group) in zip(teachers, course_groups)]
 
         course_group.save()

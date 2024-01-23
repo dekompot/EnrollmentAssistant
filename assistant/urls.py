@@ -1,8 +1,9 @@
 from django.urls import path
 
 from . import views
-from .views import GeneratePlanController
+from .controllers.shared import timetable, search_groups
 
 urlpatterns = [
-    path("<int:student_id>/", GeneratePlanController.student, name="student")
+    path("timetable/<str:student_id>/", timetable, name="timetable"),
+    path("enrollment/search", search_groups, name="search_groups")
 ]

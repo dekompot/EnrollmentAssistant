@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 
@@ -49,11 +50,11 @@ class FieldOfStudies(models.Model):
 
 
 class Studying(models.Model):
-    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     field_of_study = models.ForeignKey(FieldOfStudies, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Studying(student_id={self.student_id}, field_of_study={self.field_of_study})"
+        return f"Studying(student_id={self.student}, field_of_study={self.field_of_study})"
 
     def __repr__(self):
         return self.__str__()
@@ -85,11 +86,13 @@ class GridModification(models.Model):
 
 
 class Timetable(models.Model):
-    enrollment_edition = models.ForeignKey(EnrollmentEdition, primary_key=True, on_delete=models.CASCADE)
-    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    enrollment_edition = models.ForeignKey(EnrollmentEdition, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+
+    UniqueConstraint(fields=['enrollment_edition', 'student'], name='timetable_primary_keys')
 
     def __str__(self):
-        return f"Timetable(student_id={self.student_id})"
+        return f"Timetable(student_id={self.student})"
 
     def __repr__(self):
         return self.__str__()
@@ -105,6 +108,7 @@ class CourseGroup(models.Model):
 
     def __repr__(self):
         return self.__str__()
+
 
 class CourseType(models.TextChoices):
     LECTURE = "Lec", _("Lecture")
@@ -143,6 +147,7 @@ class Course(models.Model):
     def __repr__(self):
         return self.__str__()
 
+
 # Create your models here.
 class Group(models.Model):
     code = models.CharField(max_length=30, primary_key=True)
@@ -154,6 +159,7 @@ class Group(models.Model):
     end_time = models.DateTimeField()
     building = models.CharField(max_length=30)
     hall = models.CharField(max_length=30)
+    available_seats = models.IntegerField(default=16)
 
     def __str__(self):
         return f'{self.code} on {self.day_of_week} in {self.week_type} from ' \
@@ -177,42 +183,44 @@ class Group(models.Model):
 
 
 class Lecturing(models.Model):
-    teacher_id = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    group_code = models.ForeignKey(Group, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Lecturing(teacher_id={self.teacher_id}, group_code={self.group_code})"
+        return f"Lecturing(teacher_id={self.teacher}, group_code={self.group})"
 
     def __repr__(self):
         return self.__str__()
 
 
 class EnrollmentRecord(models.Model):
-    group_code = models.ForeignKey(Group, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
     timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE)
 
+
+
     def __str__(self):
-        return f"EnrollmentRecord(group_code={self.group_code}, timetable={self.timetable})"
+        return f"EnrollmentRecord(group_code={self.group}, timetable={self.timetable})"
 
     def __repr__(self):
         return self.__str__()
 
 class Basket(models.Model):
-    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Basket(student_id={self.student_id})"
+        return f"Basket(student_id={self.student})"
 
     def __repr__(self):
         return self.__str__()
 
 class Preference(models.Model):
-    basket_id = models.ForeignKey(Basket, on_delete=models.CASCADE)
-    group_code = models.ForeignKey(Group, on_delete=models.CASCADE)
+    basket = models.ForeignKey(Basket, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
     priority = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"Preference(basket_id={self.basket_id}, group_code={self.group_code}, priority={self.priority})"
+        return f"Preference(basket_id={self.basket}, group_code={self.group}, priority={self.priority})"
 
     def __repr__(self):
         return self.__str__()
@@ -227,25 +235,26 @@ class EnrollmentQueue(models.Model):
         return self.__str__()
 
 class EnrollmentPermission(models.Model):
-    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
-    queue_id = models.ForeignKey(EnrollmentQueue, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    queue = models.ForeignKey(EnrollmentQueue, on_delete=models.CASCADE)
     is_permitted = models.BooleanField(default=False)
     date_from = models.DateTimeField()
     date_to = models.DateTimeField()
     is_permitted_earlier = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"EnrollmentPermission(student_id={self.student_id}, queue_id={self.queue_id}, is_permitted={self.is_permitted}, date_from={self.date_from}, date_to={self.date_to}, is_permitted_earlier={self.is_permitted_earlier})"
+        return f"EnrollmentPermission(student_id={self.student}, queue_id={self.queue}, is_permitted={self.is_permitted}, date_from={self.date_from}, date_to={self.date_to}, is_permitted_earlier={self.is_permitted_earlier})"
 
     def __repr__(self):
         return self.__str__()
 
+
 class QueueModification(models.Model):
-    queue_id = models.ForeignKey(EnrollmentQueue, on_delete=models.CASCADE)
-    worker_id = models.ForeignKey(UniWorker, on_delete=models.CASCADE)
+    queue = models.ForeignKey(EnrollmentQueue, on_delete=models.CASCADE)
+    worker = models.ForeignKey(UniWorker, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"QueueModification(queue_id={self.queue_id}, worker_id={self.worker_id})"
+        return f"QueueModification(queue_id={self.queue}, worker_id={self.worker})"
 
     def __repr__(self):
         return self.__str__()
