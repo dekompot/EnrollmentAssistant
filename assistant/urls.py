@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+
 from .controllers.shared import timetable, search_groups
 
 urlpatterns = [
