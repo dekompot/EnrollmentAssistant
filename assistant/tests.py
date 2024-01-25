@@ -1,6 +1,10 @@
+import unittest
+
 from django.test import TestCase
 
+from assistant.controllers.shared import SearchForm
 from assistant.enrollment.enrollment import Enrollment
+from assistant.test_procedures import load_mock_data
 from parsing.parse_json import load_grid_from_json
 from assistant.models import *
 
@@ -49,4 +53,11 @@ class TestLoadingFromJson(TestCase):
             enrollment.register(student, group)
 
 
+class TestGetFilteredGroups(TestCase):
+
+    def setUp(self):
+        load_mock_data()
+
+    def test_get_groups_from_teacher(self):
+        form = SearchForm()
 

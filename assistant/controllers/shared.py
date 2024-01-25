@@ -5,7 +5,7 @@ from django.forms import forms, DateField, DateTimeField, DateTimeInput
 from django.forms import ChoiceField, Select
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
-from assistant.models import DayOfWeek, Course
+from assistant.models import DayOfWeek, Course, Lecturing
 
 from assistant.models import Timetable, EnrollmentRecord, Group, Teacher
 
@@ -63,12 +63,16 @@ class SearchForm(forms.Form):
         date_to = datetime.datetime.strptime(self['date_to'].value(), '%H:%M')
         is_valid = date_from <= date_to
 
-        self.add_error('date_from', f'{date_from} <= {date_to}')
+        if not is_valid:
+            self.add_error('date_from', f'{date_from} <= {date_to}')
+            return False
 
         group_code = self['group_code'].value()
         course_code = self['course_code'].value()
-        is_valid = is_valid and (group_code is None or course_code is None)
-        self.add_error('group_code', f"group_code = {group_code}, course_code = {course_code}")
+        is_valid = group_code == '' or course_code == ''
+
+        if not is_valid:
+            self.add_error('group_code', f"group_code = {group_code}, course_code = {course_code}")
 
         return is_valid
 
@@ -85,6 +89,7 @@ def search_groups(request):
         else:
             return render(request, 'assistant/form_error.html', {'form': form})
 
+    # GET request
     return render(request, 'assistant/search_groups.html', {'form': SearchForm()})
 
 
@@ -93,8 +98,11 @@ def get_filtered_groups(form: SearchForm) -> List[Group]:
     date_from = datetime.datetime.strptime(form['date_from'].value(), '%H:%M')
     date_to = datetime.datetime.strptime(form['date_to'].value(), '%H:%M')
 
-    group_code = form['group_code']
-    course_code = form['group_code']
+    group_code = form['group_code'].value()
+    course_code = form['group_code'].value()
+
+    teacher = form['teacher'].value()
+    lecturings = Lecturing.objects.filter(teacher__name__exact=teacher).all()
 
     return Group.objects.filter(start_time__gte=date_from, end_time__lte=date_to,
                                 code__startswith=group_code, course__group__code__startswith=course_code).all()
