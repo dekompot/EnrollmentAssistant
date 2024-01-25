@@ -2,7 +2,7 @@ import unittest
 
 from django.test import TestCase
 
-from assistant.controllers.shared import SearchForm
+from assistant.controllers.shared import SearchForm, get_filtered_groups
 from assistant.enrollment.enrollment import Enrollment
 from assistant.test_procedures import load_mock_data
 from parsing.parse_json import load_grid_from_json
@@ -59,5 +59,14 @@ class TestGetFilteredGroups(TestCase):
         load_mock_data()
 
     def test_get_groups_from_teacher(self):
-        form = SearchForm()
+        form = SearchForm(initial={'teacher': 'Mateusz Mądry'})
+        groups = get_filtered_groups(form)
+        assert (set(group.code for group in groups)
+                == set(['K02-75c', 'K02-75d', 'K02-75e', 'K02-75g', 'K02-75f', 'K02-75h', 'K02-75a', 'K02-75b']))
+
+
+    def test_get_groups_at_day_of_week(self):
+        form = SearchForm(initial={'day_of_week': 'Monday'})
+        groups = get_filtered_groups(form)
+        print(groups)
 

@@ -1,5 +1,5 @@
 import datetime
-from typing import List
+from typing import List, Union
 
 from django.forms import forms, DateField, DateTimeField, DateTimeInput
 from django.forms import ChoiceField, Select
@@ -37,7 +37,7 @@ def get_courses():
 
 def get_teachers():
     teachers = Teacher.objects.all()
-    return [('', '')] + [(teacher.name, str(teacher)) for teacher in teachers]
+    return [('', '')] + [(teacher.name, teacher.name) for teacher in teachers]
 
 
 def get_days_of_week():
@@ -65,14 +65,6 @@ class SearchForm(forms.Form):
 
         if not is_valid:
             self.add_error('date_from', f'{date_from} <= {date_to}')
-            return False
-
-        group_code = self['group_code'].value()
-        course_code = self['course_code'].value()
-        is_valid = group_code == '' or course_code == ''
-
-        if not is_valid:
-            self.add_error('group_code', f"group_code = {group_code}, course_code = {course_code}")
 
         return is_valid
 
@@ -93,16 +85,30 @@ def search_groups(request):
     return render(request, 'assistant/search_groups.html', {'form': SearchForm()})
 
 
+def as_string(value: Union[str, None]):
+    if value is None:
+        value = ''
+    return value
+
+
 def get_filtered_groups(form: SearchForm) -> List[Group]:
 
     date_from = datetime.datetime.strptime(form['date_from'].value(), '%H:%M')
     date_to = datetime.datetime.strptime(form['date_to'].value(), '%H:%M')
 
-    group_code = form['group_code'].value()
-    course_code = form['group_code'].value()
+    group_code = as_string(form['group_code'].value())
+    course_code = as_string(form['group_code'].value())
 
     teacher = form['teacher'].value()
     lecturings = Lecturing.objects.filter(teacher__name__exact=teacher).all()
+    # This is wrong
+    teacher_groups = [lecturing.group.code for lecturing in lecturings]
 
+    day_of_week = as_string(form['day_of_week'].value()).lower()
+    if day_of_week != '':
+        day_of_week = day_of_week[:2]
+
+    # TODO: pass as dictionary
     return Group.objects.filter(start_time__gte=date_from, end_time__lte=date_to,
-                                code__startswith=group_code, course__group__code__startswith=course_code).all()
+                                code__startswith=group_code, course__group__code__startswith=course_code,
+                                code__in=teacher_groups, day_of_week__startswith=day_of_week).distinct().all()
