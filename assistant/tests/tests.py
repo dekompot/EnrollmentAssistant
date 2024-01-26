@@ -1,15 +1,17 @@
-import unittest
-
+'''
+Write here tests for debugging purposes
+'''
 from django.test import TestCase
 
-from assistant.controllers.shared import SearchForm, get_filtered_groups
 from assistant.enrollment.enrollment import Enrollment
-from assistant.mock_data import load_mock_data
 from parsing.parse_json import load_grid_from_json
 from assistant.models import *
-from datetime import datetime
 
-from utils.datetime_utils import as_hour
+
+class TestDayOfWeek(TestCase):
+
+    def test_days_of_week_comparison(self):
+        print(DayOfWeek.MONDAY)
 
 
 class TestLoadingFromJson(TestCase):

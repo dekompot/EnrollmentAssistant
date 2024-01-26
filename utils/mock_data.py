@@ -1,10 +1,12 @@
 from assistant.enrollment.enrollment import Enrollment
-from assistant.models import EnrollmentEdition, FieldOfStudies, Student, Timetable, Group
+from assistant.models import EnrollmentEdition, FieldOfStudies, Student, Timetable, Group, Course
 from parsing.parse_json import load_grid_from_json
 
 
 def generate_mock_students_with_timetables(enrollment_edition: EnrollmentEdition):
-    students = [('266661', 'Jan Kowalski', 4.5), ('266662', 'Mieczysław Pierzek', 5.3), ('266663', 'Antoni Marek', 4.0)]
+    students = [('266640', 'Kacper Bartocha', 4.5),
+                ('266661', 'Jan Kowalski', 4.5), ('266662', 'Mieczysław Pierzek', 5.3),
+                ('266663', 'Antoni Marek', 4.0), ('266664', 'Paulina Korzonek', 4.99)]
     for (id, name, avg) in students:
         student = Student(id=id, name=name, average=avg)
         student.save()
