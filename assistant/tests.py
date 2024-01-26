@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from assistant.controllers.shared import SearchForm, get_filtered_groups
 from assistant.enrollment.enrollment import Enrollment
-from assistant.test_procedures import load_mock_data
+from assistant.mock_data import load_mock_data
 from parsing.parse_json import load_grid_from_json
 from assistant.models import *
 from datetime import datetime

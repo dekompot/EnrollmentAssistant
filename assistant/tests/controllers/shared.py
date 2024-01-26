@@ -1,11 +1,11 @@
 from django.test import TestCase
 
 from assistant.controllers.shared import SearchForm, get_filtered_groups
-from assistant.test_procedures import load_mock_data
+from assistant.mock_data import load_mock_data
 from django.test import TestCase
 
 from assistant.controllers.shared import SearchForm, get_filtered_groups
-from assistant.test_procedures import load_mock_data
+from assistant.mock_data import load_mock_data
 
 
 class TestGetFilteredGroups(TestCase):
