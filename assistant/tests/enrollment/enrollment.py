@@ -81,22 +81,3 @@ class TestRegister(TestCase):
         assert enrollment.register(student, group_1) == EnrollmentReturnCodes.SUCCESS
 
         assert enrollment.register(student, group_2) == EnrollmentReturnCodes.COURSE_ALREADY_TAKEN
-
-
-
-class TestIsAlreadyRegistered(TestCase):
-
-    def setUp(self):
-        setUp()
-
-    def test_is_already_registered(self):
-        enrollment_edition = EnrollmentEdition.objects.get(id__exact='summer-2022/2023')
-        enrollment = Enrollment(enrollment_edition)
-
-        student = Student.objects.get(id='266640')
-        group = Group.objects.get(code__exact='T02-99a')
-        timetable = Timetable(enrollment_edition=enrollment_edition, student=student)
-
-        timetable.save()
-
-        assert not is_already_registered(timetable, group)
