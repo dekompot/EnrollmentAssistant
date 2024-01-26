@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Group Details</title>
+</head>
+<body>
+    <h4>Group</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Code</dt>
+        <dd class="col-sm-10"> {{ group_info.code }}</dd>
+        <dt class="col-sm-2">Course</dt>
+        <dd class="col-sm-10"> {{ group_info.course }}</dd>
+        <dt class="col-sm-2">Day</dt>
+        <dd class="col-sm-10"> {{ group_info.day_of_week }}</dd>
+        <dt class="col-sm-2">From - to</dt>
+        <dd class="col-sm-10"> {{ group_info.from }} - {{ group_info.to }}</dd>
+        <dt class="col-sm-2">Taken/All</dt>
+        <dd class="col-sm-10"> {{  group_info.taken }}/{{  group_info.available }}</dd>
+    </dl>
+
+</body>
+</html>

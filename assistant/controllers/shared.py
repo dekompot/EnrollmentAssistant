@@ -5,6 +5,8 @@ from django.forms import forms, DateField, DateTimeField, DateTimeInput
 from django.forms import ChoiceField, Select
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
+
+from assistant.enrollment.groupshandler import GroupsHandler
 from assistant.models import DayOfWeek, Course, Lecturing
 
 from assistant.models import Timetable, EnrollmentRecord, Group, Teacher
@@ -23,6 +25,25 @@ def timetable(request, student_id):
     }
 
     return render(request, 'assistant/timetable.html', context)
+
+
+def group_details(request, group_code: str):
+    try:
+        group = Group.objects.get(code__exact=group_code)
+    except Group.DoesNotExist:
+        raise Http404("Group does not exist")
+
+    groups_handler = GroupsHandler('CBE-2021-inz')
+    taken_seats = groups_handler.get_taken_seats(group_code)
+
+    context = {
+        'group_info': {'code': group.code, 'course': group.course.name,
+                       'taken': taken_seats, 'available': group.available_seats,
+                       'day_of_week': group.day_of_week}
+    }
+
+    return render(request, 'assistant/group_details.html', context)
+
 
 
 def get_groups():
@@ -117,5 +138,4 @@ def get_filtered_groups(form: SearchForm) -> List[Group]:
     if teacher_groups:
         filters['code__in'] = teacher_groups
 
-    # TODO: pass as dictionary
     return Group.objects.filter(**filters).distinct().all()

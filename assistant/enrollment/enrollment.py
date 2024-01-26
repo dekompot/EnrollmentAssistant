@@ -1,4 +1,4 @@
-from assistant.models import EnrollmentEdition, Student, Group, EnrollmentRecord, Timetable
+from assistant.models import EnrollmentEdition, Student, Group, EnrollmentRecord, Timetable, FieldOfStudies
 from utils.return_codes import EnrollmentReturnCodes
 
 
@@ -18,10 +18,23 @@ def is_already_registered(timetable: Timetable, group: Group) -> bool:
     return registered.exists()
 
 
+# With real USOS we'll ask what is the current enrollment edition
+def get_enrollment_edition(field_of_studies: str):
+    field_of_studies = FieldOfStudies.objects.get(id=field_of_studies)
+    enrollment_editions = EnrollmentEdition.objects.filter(id__exact='summer-2022/2023')
+    if not enrollment_editions:
+        enrollment_edition = EnrollmentEdition(id='summer-2022/2023', academic_year='2022/2023',
+                                           semester=4, field_of_studies__id=field_of_studies.id)
+        enrollment_edition.save()
+    else:
+        enrollment_edition = enrollment_editions[0]
+    return enrollment_edition
+
+
 class Enrollment:
 
-    def __init__(self, enrollment_edition: EnrollmentEdition):
-        self.enrollment_edition = enrollment_edition
+    def __init__(self, field_of_studies):
+        self.enrollment_edition = get_enrollment_edition(field_of_studies)
 
     # This should only communicate with db or also validate?
     def register(self, student: Student, group: Group) -> EnrollmentReturnCodes:
@@ -40,4 +53,15 @@ class Enrollment:
         enrollment_record = EnrollmentRecord(group=group, timetable=timetable)
         enrollment_record.save()
         return EnrollmentReturnCodes.SUCCESS
+
+    def unregister(self, student: Student, group: Group) -> bool:
+        timetable = Timetable.objects.get(enrollment_edition=self.enrollment_edition,
+                                          student=student)
+        enrollment_record = EnrollmentRecord.objects.filter(group=group, timetable=timetable)
+
+        if enrollment_record:
+            enrollment_record[0].delete()
+
+        return len(enrollment_record) > 0
+
 

@@ -214,7 +214,6 @@ class EnrollmentRecord(models.Model):
     timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE)
 
 
-
     def __str__(self):
         return f"EnrollmentRecord(group_code={self.group}, timetable={self.timetable})"
 

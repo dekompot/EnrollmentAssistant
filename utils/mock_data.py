@@ -38,7 +38,7 @@ def load_sign_up_mock():
     group_ids_to_enroll = ['K05-67j', 'K02-82a', 'K02-75d', 'K02-73d']
     groups = Group.objects.filter(code__in=group_ids_to_enroll).all()
 
-    enrollment = Enrollment(enrollment_edition=enrollment_edition)
+    enrollment = Enrollment()
 
     for group in groups:
         enrollment.register(student, group)
