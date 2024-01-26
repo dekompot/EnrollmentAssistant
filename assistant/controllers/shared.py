@@ -97,18 +97,25 @@ def get_filtered_groups(form: SearchForm) -> List[Group]:
     date_to = datetime.datetime.strptime(form['date_to'].value(), '%H:%M')
 
     group_code = as_string(form['group_code'].value())
-    course_code = as_string(form['group_code'].value())
+    course_code = as_string(form['course_code'].value())
 
     teacher = form['teacher'].value()
     lecturings = Lecturing.objects.filter(teacher__name__exact=teacher).all()
-    # This is wrong
     teacher_groups = [lecturing.group.code for lecturing in lecturings]
 
     day_of_week = as_string(form['day_of_week'].value()).lower()
+    # Days of week are kept in abbreviated form in the database
     if day_of_week != '':
         day_of_week = day_of_week[:2]
 
+    filters = {
+        'start_time__gte': date_from, 'end_time__lte': date_to,
+        'code__startswith': group_code, 'course__group__code__startswith': course_code,
+        'day_of_week__startswith': day_of_week
+    }
+
+    if teacher_groups:
+        filters['code__in'] = teacher_groups
+
     # TODO: pass as dictionary
-    return Group.objects.filter(start_time__gte=date_from, end_time__lte=date_to,
-                                code__startswith=group_code, course__group__code__startswith=course_code,
-                                code__in=teacher_groups, day_of_week__startswith=day_of_week).distinct().all()
+    return Group.objects.filter(**filters).distinct().all()
