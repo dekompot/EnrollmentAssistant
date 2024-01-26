@@ -84,3 +84,15 @@ class TestGetFilteredGroups(TestCase):
         groups = get_filtered_groups(form)
         assert set(group.code for group in groups) == {'K02-74a', 'K02-75c', 'K02-75d', 'K02-77d',
                                                        'K02-79c', 'K02-79d', 'K02-81g', 'K02-81h'}
+
+
+class TestRegister(TestCase):
+
+    def setUp(self):
+        load_mock_data()
+
+    def test_can_be_registered(self):
+        enrollment_edition = EnrollmentEdition.objects.get(id__exact='summer-2022/2023')
+        enrollment = Enrollment(enrollment_edition)
+
+

@@ -1,5 +1,5 @@
 from assistant.models import EnrollmentEdition, Student, Group, EnrollmentRecord, Timetable
-from assistant.utils.return_codes import ReturnCode
+from assistant.utils.return_codes import EnrollmentReturnCodes
 
 
 class Enrollment:
@@ -8,32 +8,32 @@ class Enrollment:
         self.enrollment_edition = enrollment_edition
 
     # This should only communicate with db or also validate?
-    def register(self, student: Student, group: Group) -> ReturnCode:
+    def register(self, student: Student, group: Group) -> EnrollmentReturnCodes:
         if not self.is_group_available(group):
-            return ReturnCode.GROUP_NOT_AVAILABLE
+            return EnrollmentReturnCodes.GROUP_NOT_AVAILABLE
 
         timetable = Timetable.objects.get(enrollment_edition=self.enrollment_edition,
                                           student=student)
-        '''
+
         if self.is_already_registered(timetable, group):
-            return ReturnCode.STUDENT_ALREADY_IN_COURSE
-        '''
+            return EnrollmentReturnCodes.STUDENT_ALREADY_IN_COURSE
 
         if not self.can_be_regsitered(timetable, group):
-            return ReturnCode.GROUP_IS_CONFLICTING
+            return EnrollmentReturnCodes.GROUP_IS_CONFLICTING
 
         enrollment_record = EnrollmentRecord(group=group, timetable=timetable)
         enrollment_record.save()
-        return ReturnCode.SUCCESS
+        return EnrollmentReturnCodes.SUCCESS
+
 
     def can_be_regsitered(self, timetable: Timetable, group: Group):
         # mock implementation
         return True
 
+
     def is_group_available(self, group: Group) -> bool:
         registered_students = EnrollmentRecord.objects.filter(group=group).all()
         return len(registered_students) < group.available_seats
-
 
     def is_already_registered(self, timetable: Timetable, group: Group) -> bool:
         course = group.course
