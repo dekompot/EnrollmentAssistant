@@ -1,9 +1,9 @@
 import datetime
 from typing import List, Union
 
-from django.forms import forms, DateField, DateTimeField, DateTimeInput
+from django.forms import forms, DateTimeField, DateTimeInput
 from django.forms import ChoiceField, Select
-from django.http import Http404, HttpResponse
+from django.http import Http404
 from django.shortcuts import render
 
 from assistant.enrollment.groupshandler import GroupsHandler

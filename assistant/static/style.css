@@ -1,0 +1,63 @@
+body{
+    color: green;
+}
+h1{
+    width: 19.3125rem;
+height: 5.125rem;
+flex-shrink: 0;
+    color: #000;
+font-family: "Work Sans", sans-serif;
+font-size: 4rem;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+letter-spacing: -0.08rem;
+}
+a{
+    border-radius: 2rem;
+    background: linear-gradient(90deg, #7879F1 -0.15%, #383985 100%);
+    color: #FFF;
+    width: 10rem;
+    display: inline-flex;
+height: 3rem;
+    text-decoration: none;
+flex-direction: column;
+justify-content: center;
+text-align: center;
+font-family: "Work Sans", sans-serif;
+font-size: 1.25rem;
+font-style: normal;
+font-weight: 300;
+line-height: normal;
+letter-spacing: -0.025rem;
+}
+
+.group .code{
+ color: #000;
+font-family: "Work Sans", sans-serif;
+font-size: 1.25rem;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+letter-spacing: -0.025rem;
+}
+
+.group .name{
+    color: #000;
+font-family: "Work Sans", sans-serif;
+font-size: 1.25rem;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+letter-spacing: -0.025rem;
+}
+
+.group .time{
+    color: #000;
+font-family: "Work Sans";
+font-size: 1.25rem;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+letter-spacing: -0.025rem;
+}
