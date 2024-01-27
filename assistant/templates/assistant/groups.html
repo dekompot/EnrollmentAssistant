@@ -10,7 +10,7 @@
         <ul>
         {% for group in groups %}
             <li>
-                {{ group }} belongs to {{ group.course.code }} [ {{ group.available_seats }}]| <a href="/assistant/enrollment/details/{{ group.code }}">Details</a>
+                {{ group }} belongs to {{ group.course.code }} [ {{ group.available_seats }}] | <a href="/assistant/enrollment/details/{{ group.code }}">Details</a> | <a href="/assistant/enrollment/register/{{ student_id }}/{{ group.code }}">Register</a> | <a href="/assistant/enrollment/unregister/{{ student_id }}/{{ group.code }}">Unregister</a>
             </li>
         {% endfor %}
         </ul>

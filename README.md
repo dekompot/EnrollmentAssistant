@@ -9,3 +9,7 @@ Jak ja to widzę:
     więc jest też routing wyższego poziomu, który odsyła to co się zaczyna na *assistant* dalej do metod routingu tejże aplikacji)
 - ``parsing`` - jakieś metody jeszcze z poprzedniego UniPlannera
 - ``utils`` - utlisy, poza assistant aczkolwiek ten i powyższe pakiety może jeszcze zmienią swoją lokalizację, bez znaczenia teraz w sumie
+
+TESTOWE URL:
+http://127.0.0.1:8000/assistant/enrollment/search/266640/
+http://127.0.0.1:8000/assistant/timetable/266640/
