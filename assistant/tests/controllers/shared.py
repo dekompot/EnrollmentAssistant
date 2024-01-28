@@ -1,7 +1,6 @@
 from django.test import TestCase
 
 from assistant.controllers.shared import SearchForm, get_filtered_groups
-from assistant.models import Timetable, EnrollmentRecord
 from utils.mock_data import load_mock_data
 
 
