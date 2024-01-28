@@ -3,6 +3,9 @@
 {% block content %}
     <h1>Queue of {{ field }} </h1>
     <h2>{{ enrollment_edition }}</h2>
+    <div class= "search-button">
+            <a href="{% url 'search_students' %}">Add students</a>
+        </div>
     <h3>Permitted early</h3>
     {% include 'queue/students.html' with students=early %}
     <h3>Standard queue</h3>

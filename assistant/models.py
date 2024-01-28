@@ -194,7 +194,7 @@ class Group(models.Model):
         return self.week_type == WeekType.ODD_WEEK or self.week_type == WeekType.EVERY_WEEK
 
     def intervenes_with(self, other):
-        return self.start_time < other.end_time and self.end_time > other.start_time
+        return self.day_of_week == other.day_of_week and self.start_time < other.end_time and self.end_time > other.start_time
 
 
 
