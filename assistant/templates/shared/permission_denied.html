@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}Permission denied{% endblock %}
+{% block content %}
+<h4>Permission denied</h4>
+<p>You tried to perform an action without necessary permissions</p>
+
+{% if permissions %}
+    {% for permission in permissions %}
+        <p>{{ permission }}</p>
+    {% endfor %}
+{% endif %}
+{% endblock %}
