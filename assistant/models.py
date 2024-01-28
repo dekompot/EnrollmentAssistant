@@ -259,7 +259,7 @@ class EnrollmentPermission(models.Model):
     is_permitted_earlier = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"EnrollmentPermission(student_id={self.student}, queue_id={self.queue}, is_permitted={self.is_permitted}, date_from={self.date_from}, date_to={self.date_to}, is_permitted_earlier={self.is_permitted_earlier})"
+        return f"EnrollmentPermission(student_id={self.student}, queue_id={self.queue}, date_from={self.date_from}, date_to={self.date_to}, is_permitted_earlier={self.is_permitted_earlier})"
 
     def __repr__(self):
         return self.__str__()
