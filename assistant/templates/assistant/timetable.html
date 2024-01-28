@@ -1,20 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Home page</title>
-</head>
-<body>
-    {% if student_groups %}
-        <ul>
-        {% for group in student_groups %}
-            <li>
-                {{ group.code }} takes place {{ group.start_time.time }} to {{ group.end_time.time }}
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-    <p>No groups are available.</p>
-  {% endif %}
-</body>
-</html>
+{% extends "layout.html" %}
+{% block title %}Timetable{% endblock %}
+{% block content %}
+    <h1>Your timetable</h1>
+    {% include 'shared/groups.html' %}
+{% endblock %}

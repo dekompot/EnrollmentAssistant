@@ -20,7 +20,7 @@ def timetable(request, student_id):
     enrollment_records = EnrollmentRecord.objects.filter(timetable=student_timetable).all()
 
     context = {
-        'student_groups': [enr.group for enr in enrollment_records],
+        'groups': [enr.group for enr in enrollment_records],
         'student_id': student_id
     }
 
