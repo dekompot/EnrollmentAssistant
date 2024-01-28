@@ -1,0 +1,24 @@
+<table>
+    {% for group in groups %}
+        <tr>
+            <td class="group">
+                <div class="code">
+                    {{ group.course.code }}
+                </div>
+                <div class="name">
+                    {{ group.course.name }}
+                </div>
+                <div class="time">
+                    {{ group }}
+                </div>
+            </td>
+            <td>
+                <div class="buttons">
+                    <a href="{% url 'group_details' group.code %}">Details</a>
+                    <a href="{% url 'register' student_id group.code %}">Register</a>
+                    <a href="{% url 'unregister' student_id group.code %}">Unregister</a>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

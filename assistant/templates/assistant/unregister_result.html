@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block title %}Unregistered{% endblock %}
+{% block content %}
+    <h1>Unregistration</h1>
+    {% if result %}
+        <h2>Successfully unregistered from {{ group.code }}</h2>
+    {% else %}
+        <h2>Could not unregister you ({{ student.id }}) from the group {{ group.code }}</h2>
+    {% endif %}
+{% endblock %}

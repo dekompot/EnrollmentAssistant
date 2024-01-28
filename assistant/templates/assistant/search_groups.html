@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}Groups filter{% endblock %}
+{% block content %}
+    {% include "shared/search_form.html" %}
+    {% if errors %}
+        {% include "shared/form_error.html" %}
+    {% elif groups %}
+        {% include "shared/groups.html" %}
+    {% else %}
+        <p>No groups are available.</p>
+    {% endif  %}
+{% endblock %}

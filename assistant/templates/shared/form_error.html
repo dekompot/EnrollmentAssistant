@@ -1,0 +1,6 @@
+{% for field, error_list in errors.items %}
+    {{ field }}:
+    {% for error in error_list %}
+        {{ error }}<br>
+    {% endfor %}
+{% endfor %}
