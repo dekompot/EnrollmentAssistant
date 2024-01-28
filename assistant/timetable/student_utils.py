@@ -5,7 +5,6 @@ from assistant.models import FieldOfStudies, Studying, EnrollmentQueue, Enrollme
 from assistant.enrollment.enrollment import get_enrollment_edition
 from assistant.models import Student, EnrollmentPermission
 from utils.return_codes import PermissionsReturnCodes
-from dateutil.parser import parse
 
 
 def get_field_of_studies(student_id: str) -> List[FieldOfStudies]:
@@ -20,9 +19,7 @@ def is_student_in_registration_period(student: Student, field_of_studies: str) -
     if not enrollment_permissions:
         return PermissionsReturnCodes.NOT_PERMITTED
 
-    return PermissionsReturnCodes.PERMITTED if \
-        (enrollment_permissions[0].date_from.timestamp() <= datetime.now().timestamp() < enrollment_permissions[0].date_to.timestamp())\
-        else PermissionsReturnCodes.NOT_IN_REGISTRATION_DATE
+    return PermissionsReturnCodes.PERMITTED if enrollment_permissions[0].is_in_date(datetime.now()) else PermissionsReturnCodes.NOT_IN_REGISTRATION_DATE
 
 
 

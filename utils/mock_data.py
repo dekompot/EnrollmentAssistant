@@ -29,7 +29,7 @@ def generate_mock_students(enrollment_edition: EnrollmentEdition):
         timetable.save()
         studying = Studying(student=student, field_of_study=field_of_studies)
         studying.save()
-        if df and dt:
+        if df is not None:
             permission = EnrollmentPermission(student=student, queue=queue,
                                               date_from=df,
                                               date_to=dt,

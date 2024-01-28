@@ -264,6 +264,9 @@ class EnrollmentPermission(models.Model):
     def __repr__(self):
         return self.__str__()
 
+    def is_in_date(self, other):
+        return self.date_from <= other <= self.date_to
+
 
 class QueueModification(models.Model):
     queue = models.ForeignKey(EnrollmentQueue, on_delete=models.CASCADE)
