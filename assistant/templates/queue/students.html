@@ -1,0 +1,29 @@
+<table class="students">
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Average
+            </th>
+        </tr>
+    {% for student in students %}
+
+        <tr>
+            <td class="name">
+                {{ student.name }} [{{ student.id }}]
+            </td>
+            <td>
+                {{ student.average }}
+            </td>
+            <td>
+                <div class="buttons">
+                    <a href="{% url 'early' student.id %}">Grant early</a>
+                    <a href="{% url 'rm-early' student.id %}" class="button-rm" >Remove early</a>
+                    <a href="{% url 'remove' student.id %}">Remove</a>
+                    <a href="{% url 'add' student.id %}" class="button-rm">Add</a>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

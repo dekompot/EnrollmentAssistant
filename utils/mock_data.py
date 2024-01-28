@@ -7,17 +7,23 @@ from assistant.models import EnrollmentEdition, FieldOfStudies, Student, Timetab
 from parsing.parse_json import load_grid_from_json
 
 
-def generate_mock_students(enrollment_edition: EnrollmentEdition):
+def insert():
+    enrollment_edition = EnrollmentEdition.objects.get(id__exact='summer-2022/2023')
+    generate_mock_students(enrollment_edition)
 
+
+def generate_mock_students(enrollment_edition: EnrollmentEdition):
     reg_date_1 = (datetime.datetime.now() - datetime.timedelta(minutes=10),
-                       datetime.datetime.now() + datetime.timedelta(minutes=10))
+                  datetime.datetime.now() + datetime.timedelta(minutes=10))
 
     reg_date_2 = (datetime.datetime.now() + datetime.timedelta(minutes=2),
-                      datetime.datetime.now() + datetime.timedelta(minutes=22))
+                  datetime.datetime.now() + datetime.timedelta(minutes=22))
 
     students = [('266640', 'Kacper Bartocha', 4.5, reg_date_1),
                 ('266661', 'Jan Kowalski', 4.5, reg_date_1), ('266662', 'Mieczysław Pierzek', 5.3, reg_date_2),
-                ('266663', 'Antoni Marek', 4.0, reg_date_2), ('266664', 'Paulina Korzonek', 4.99, (None, None))]
+                ('266663', 'Antoni Marek', 4.0, reg_date_2), ('266664', 'Paulina Korzonek', 4.99, (None, None)),
+                ('266600', 'Maja Plecak', 5.5, reg_date_1), ('266500', 'Paweł Koliber', 5.49, reg_date_1),
+                ('266564', 'Julia Borkowska', 5.6, reg_date_1), ('265693', 'Daniel Farganus', 3.5, reg_date_2),]
 
     field_of_studies = enrollment_edition.field_of_studies
     queue = EnrollmentQueue.objects.filter(enrollment_edition=enrollment_edition)[0]
@@ -38,7 +44,6 @@ def generate_mock_students(enrollment_edition: EnrollmentEdition):
 
 
 def load_mock_data():
-
     field_of_study = FieldOfStudies(id='CBE-2021-inz', name='Cyberbezpieczenstwo')
 
     enrollment_edition = EnrollmentEdition(id='summer-2022/2023', academic_year='2022/2023',
@@ -53,6 +58,7 @@ def load_mock_data():
     load_grid_from_json(enrollment_edition_id=enrollment_edition.id,
                         file='assistant/data/plan_kacpra.json')
 
+
 def load_sign_up_mock():
     student = Student.objects.get(id='266640')
     enrollment_edition = EnrollmentEdition.objects.get(id='summer-2022/2023')
@@ -66,4 +72,3 @@ def load_sign_up_mock():
 
     for group in groups:
         enrollment.register(student, group)
-

@@ -258,6 +258,8 @@ class EnrollmentPermission(models.Model):
     date_to = models.DateTimeField()
     is_permitted_earlier = models.BooleanField(default=False)
 
+    UniqueConstraint(fields=['student', 'queue'], name='enrollment_permission_primary_keys')
+
     def __str__(self):
         return f"EnrollmentPermission(student_id={self.student}, queue_id={self.queue}, date_from={self.date_from}, date_to={self.date_to}, is_permitted_earlier={self.is_permitted_earlier})"
 

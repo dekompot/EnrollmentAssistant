@@ -11,6 +11,10 @@ h1{
     line-height: normal;
     letter-spacing: -0.08rem;
 }
+.button-rm{
+    background: linear-gradient(90deg, darkred, black);
+    color: #FFF;
+}
 a{
     margin: 1rem;
     border-radius: 2rem;
@@ -58,4 +62,17 @@ font-style: normal;
 font-weight: 400;
 line-height: normal;
 letter-spacing: -0.025rem;
+}
+.students{
+    color: #000;
+font-family: "Work Sans", sans-serif;
+font-size: 1.5rem;
+font-style: normal;
+font-weight: 300;
+line-height: normal;
+letter-spacing: -0.03rem;
+}
+
+.students .name{
+    width: 25rem;
 }
