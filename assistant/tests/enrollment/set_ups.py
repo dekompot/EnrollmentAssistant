@@ -2,15 +2,17 @@ from django.test import TestCase
 
 from assistant.enrollment.enrollment import Enrollment
 from assistant.models import *
-from utils.mock_data import load_mock_data, generate_mock_students_with_timetables
+from utils.mock_data import load_mock_data, generate_mock_students
 from utils.return_codes import EnrollmentReturnCodes
 from utils.datetime_utils import as_hour
+
+FIELD_OF_STUDIES = 'CBE-2021-inz'
 
 def set_up():
     load_mock_data()
 
     enrollment_edition = EnrollmentEdition.objects.get(id__exact='summer-2022/2023')
-    generate_mock_students_with_timetables(enrollment_edition)
+    generate_mock_students(enrollment_edition)
 
     # Generate some mock objects
     course_group = CourseGroup(code='TEST00007', name='Test Course Group')

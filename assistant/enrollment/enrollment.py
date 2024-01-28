@@ -1,4 +1,6 @@
-from assistant.models import EnrollmentEdition, Student, Group, EnrollmentRecord, Timetable, FieldOfStudies
+from typing import List, Union
+
+from assistant.models import EnrollmentEdition, Student, Group, EnrollmentRecord, Timetable, FieldOfStudies, Studying
 from utils.return_codes import EnrollmentReturnCodes
 
 
@@ -19,8 +21,9 @@ def is_already_registered(timetable: Timetable, group: Group) -> bool:
 
 
 # With real USOS we'll ask what is the current enrollment edition
-def get_enrollment_edition(field_of_studies: str):
-    field_of_studies = FieldOfStudies.objects.get(id=field_of_studies)
+def get_enrollment_edition(field_of_studies: Union[str, FieldOfStudies]):
+    if type(field_of_studies) is str:
+        field_of_studies = FieldOfStudies.objects.get(id=field_of_studies)
     enrollment_editions = EnrollmentEdition.objects.filter(id__exact='summer-2022/2023')
     if not enrollment_editions:
         enrollment_edition = EnrollmentEdition(id='summer-2022/2023', academic_year='2022/2023',

@@ -250,10 +250,10 @@ class EnrollmentQueue(models.Model):
     def __repr__(self):
         return self.__str__()
 
+
 class EnrollmentPermission(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     queue = models.ForeignKey(EnrollmentQueue, on_delete=models.CASCADE)
-    is_permitted = models.BooleanField(default=False)
     date_from = models.DateTimeField()
     date_to = models.DateTimeField()
     is_permitted_earlier = models.BooleanField(default=False)

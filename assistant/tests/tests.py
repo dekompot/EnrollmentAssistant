@@ -18,7 +18,7 @@ class TestLoadingFromJson(TestCase):
 
     def test_load_grid_from_json(self):
 
-        field_of_study = FieldOfStudies(id='CBE-2021-inz', name='Cyberbezpieczenstwo')
+        field_of_study = FieldOfStudies(id=FIELD_OF_STUDIES, name='Cyberbezpieczenstwo')
         student = Student(id='266640', name='Kacper Bartocha', average=4.5)
 
         enrollment_edition = EnrollmentEdition(id='summer-2022/2023', academic_year='2022/2023',
@@ -33,7 +33,7 @@ class TestLoadingFromJson(TestCase):
 
     def test_sign_up_student(self):
 
-        field_of_study = FieldOfStudies(id='CBE-2021-inz', name='Cyberbezpieczenstwo')
+        field_of_study = FieldOfStudies(id=FIELD_OF_STUDIES, name='Cyberbezpieczenstwo')
         student = Student(id='266640', name='Kacper Bartocha', average=4.5)
 
         enrollment_edition = EnrollmentEdition(id='summer-2022/2023', academic_year='2022/2023',
@@ -52,7 +52,7 @@ class TestLoadingFromJson(TestCase):
         group_ids_to_enroll = ['K05-67j', 'K02-82a', 'K02-75d', 'K02-73d']
         groups = Group.objects.filter(code__in=group_ids_to_enroll).all()
 
-        enrollment = Enrollment('CBE-2021-inz')
+        enrollment = Enrollment(FIELD_OF_STUDIES)
 
         for group in groups:
             enrollment.register(student, group)
