@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1>Registration</h1>
-
+{% extends "layout.html" %}
+{% block title %}Registered{% endblock %}
+{% block content %}
+    <h1>Registration</h1>
     {% if result == 'SUCCESS' %}
         <h2>Successfully registered for {{ group.code }}</h2>
     {% elif result == 'GROUP_NOT_AVAILABLE' %}
@@ -16,6 +11,4 @@
     {% else %}
         <h2>{{ student.id }} is conflicting with your plan </h2>
     {% endif %}
-
-</body>
-</html>
+{% endblock %}
