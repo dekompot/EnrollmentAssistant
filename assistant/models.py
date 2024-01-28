@@ -180,11 +180,11 @@ class Group(models.Model):
         return int((self.end_time - self.start_time).total_seconds() / 60.0)
 
     def __lt__(self, other):
-        return self.start_time < other.start_time if self.day_of_week == other.day_of_week\
+        return self.start_time < other.start_time if self.day_of_week == other.day_of_week \
             else DayOfWeek.lt(self.day_of_week, other.day_of_week)
 
     def __gt__(self, other):
-        return self.start_time > other.start_time if self.day_of_week == other.day_of_week\
+        return self.start_time > other.start_time if self.day_of_week == other.day_of_week \
             else DayOfWeek.gt(self.day_of_week, other.day_of_week)
 
     def occurs_even(self):
@@ -195,7 +195,6 @@ class Group(models.Model):
 
     def intervenes_with(self, other):
         return self.day_of_week == other.day_of_week and self.start_time < other.end_time and self.end_time > other.start_time
-
 
 
 class Lecturing(models.Model):
@@ -213,13 +212,12 @@ class EnrollmentRecord(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE)
 
-
-
     def __str__(self):
         return f"EnrollmentRecord(group_code={self.group}, timetable={self.timetable})"
 
     def __repr__(self):
         return self.__str__()
+
 
 class Basket(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -229,6 +227,7 @@ class Basket(models.Model):
 
     def __repr__(self):
         return self.__str__()
+
 
 class Preference(models.Model):
     basket = models.ForeignKey(Basket, on_delete=models.CASCADE)
@@ -240,6 +239,7 @@ class Preference(models.Model):
 
     def __repr__(self):
         return self.__str__()
+
 
 class EnrollmentQueue(models.Model):
     enrollment_edition = models.ForeignKey(EnrollmentEdition, on_delete=models.CASCADE)
@@ -284,7 +284,8 @@ class QueueModification(models.Model):
 class Exchange(models.Model):
     enrollment_record_from = models.ForeignKey(EnrollmentRecord, related_name='exchange_from_set',
                                                on_delete=models.CASCADE)
-    enrollment_record_to = models.ForeignKey(EnrollmentRecord, related_name='exchange_to_set', on_delete=models.CASCADE, blank=True, null=True)
+    enrollment_record_to = models.ForeignKey(EnrollmentRecord, related_name='exchange_to_set', on_delete=models.CASCADE,
+                                             blank=True, null=True)
     succeeded = models.BooleanField(default=False)
 
     def __str__(self):

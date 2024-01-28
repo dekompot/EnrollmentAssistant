@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from assistant.models import EnrollmentEdition, EnrollmentQueue, EnrollmentPermission, Student
-from assistant.queue.queue import set_early_permissions
+from assistant.queue.queue import set_early_permissions, add, remove, get_queue
 
 
 def give_early_permission(request, student_id):
@@ -20,33 +20,21 @@ def remove_early_permission(request, student_id):
 
 
 def add_to_queue(request, student_id):
-    enrollment_edition = EnrollmentEdition.objects.get(id__exact='summer-2022/2023')
-    queue = EnrollmentQueue.objects.get(enrollment_edition=enrollment_edition)
-    permission = EnrollmentPermission(queue=queue, student_id=student_id, date_from=datetime.datetime.now(),
-                                      date_to=datetime.datetime.now())
-    permission.save()
+    enrollment_id = 'summer-2022/2023'
+    add(enrollment_id, student_id)
     return redirect('queue')
 
 
 def remove_from_queue(request, student_id):
-    enrollment_edition = EnrollmentEdition.objects.get(id__exact='summer-2022/2023')
-    queue = EnrollmentQueue.objects.get(enrollment_edition=enrollment_edition)
-    permissions = EnrollmentPermission.objects.get(queue=queue, student=student_id)
-    permissions.delete()
+    enrollment_id = 'summer-2022/2023'
+    remove(enrollment_id, student_id)
     return redirect('queue')
 
 
-
-
-
 def queue(request):
-    enrollment_edition = EnrollmentEdition.objects.get(id__exact='summer-2022/2023')
-    queue = EnrollmentQueue.objects.get(enrollment_edition=enrollment_edition)
-    permissions = EnrollmentPermission.objects.filter(queue=queue)
-    early = [permission.student for permission in permissions if permission.is_permitted_earlier]
-    normal = [permission.student for permission in permissions if not permission.is_permitted_earlier]
-    early = sorted(early, key=lambda s: s.average, reverse=True)
-    normal = sorted(normal, key=lambda s: s.average, reverse=True)
+    enrollment_id = 'summer-2022/2023'
+    early, normal = get_queue('summer-2022/2023')
+    enrollment_edition = EnrollmentEdition.objects.get(id__exact=enrollment_id)
     context = {
         'enrollment_edition': enrollment_edition.id,
         'field': enrollment_edition.field_of_studies.name,
