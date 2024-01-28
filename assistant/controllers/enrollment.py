@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 from assistant.enrollment.enrollment import Enrollment
-from assistant.models import Student, Group
+from assistant.models import Student, Group, DayOfWeek
 from assistant.users import check_student_permission
 
 
@@ -11,7 +11,6 @@ def register(request, field_of_studies, student_id, group_code):
 
     student = Student.objects.get(id=student_id)
     group = Group.objects.get(code=group_code)
-
     context = {
         'result': enrollment.register(student, group).name,
         'student': student, 'group': group

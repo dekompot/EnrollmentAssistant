@@ -2,5 +2,24 @@
 {% block title %}Timetable{% endblock %}
 {% block content %}
     <h1>Your timetable</h1>
-    {% include 'shared/groups.html' %}
+    <table class="timetable">
+    {% for groups_given_day in groups %}
+        <tr>
+        {% for group in groups_given_day %}
+            <td class="group {{ group.course.course_type }}">
+                {{ group.course.name }}
+                <div class = "description">
+                    [{{ group.course.course_type }}]
+                    {{ group.start_time.time }} - {{ group.end_time.time }}
+                    {{ group.week_type }} {{ group.day_of_week }}
+                </div>
+                <div class="btn">
+                    <a href="{% url 'group_details' group.code %}">details</a>
+                    <a href="{% url 'unregister' student_id group.code %}">unregister</a>
+                </div>
+            </td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+    </table>
 {% endblock %}

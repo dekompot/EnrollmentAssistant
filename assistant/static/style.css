@@ -15,7 +15,7 @@ h1{
     background: linear-gradient(90deg, darkred, black);
     color: #FFF;
 }
-a{
+.buttons{
     margin: 1rem;
     border-radius: 2rem;
     background: linear-gradient(90deg, #7879F1 -0.15%, #383985 100%);
@@ -75,4 +75,70 @@ letter-spacing: -0.03rem;
 
 .students .name{
     width: 25rem;
+}
+
+.timetable .group{
+    font-family: "Work Sans", sans-serif;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: -0.025rem;
+    width: 12.1875rem;
+    height: 8.375rem;
+    flex-shrink: 0;
+    stroke-width: 1px;
+    stroke: #6D6D6D;
+    backdrop-filter: blur(2px);
+}
+
+
+.timetable .description{
+    font-size: 0.75rem;
+}
+
+.timetable .btn a{
+    border-radius: 2rem;
+    border: solid thin;
+    padding: 0.25rem;
+    color: inherit;
+    text-decoration: none;
+    display: inline-flex;
+    height: 1rem;
+    text-decoration: none;
+    flex-direction: column;
+    justify-content: center;
+    margin: 1rem 0.25rem 0.25rem;
+    text-align: center;
+    font-family: "Work Sans", sans-serif;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    letter-spacing: -0.025rem;
+}
+
+.Lab{
+    color: white;
+    background: #383985;
+}
+
+.Pra{
+    color: black;
+    background: #A5A6F6;
+}
+
+.Sem{
+    color: #000000;
+    background: #95bfff;
+}
+
+.Lec{
+    color: white;
+    background: #7879F1;
+}
+
+.Pro{
+    color: white;
+    background: #663885;
 }

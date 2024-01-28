@@ -55,26 +55,3 @@ def queue(request):
         'early': early
     }
     return render(request, 'queue/queue.html', context)
-
-class SearchForm(forms.Form):
-    group_code = ChoiceField(widget=Select, choices=get_groups, required=False)
-    course_code = ChoiceField(widget=Select, choices=get_courses, required=False)
-    teacher = ChoiceField(widget=Select, choices=get_teachers, required=False)
-    date_from = DateTimeField(widget=DateTimeInput, input_formats=['%H:%M', ], initial='00:00')
-    date_to = DateTimeField(widget=DateTimeInput, input_formats=['%H:%M', ], initial='23:59')
-    day_of_week = ChoiceField(widget=Select, choices=get_days_of_week, required=False)
-
-    def is_valid(self):
-        is_valid = super().is_valid()
-
-        if not is_valid:
-            return False
-
-        date_from = datetime.datetime.strptime(self['date_from'].value(), '%H:%M')
-        date_to = datetime.datetime.strptime(self['date_to'].value(), '%H:%M')
-        is_valid = date_from <= date_to
-
-        if not is_valid:
-            self.add_error('date_from', f'{date_from} <= {date_to}')
-
-        return is_valid

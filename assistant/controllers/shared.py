@@ -18,9 +18,11 @@ def timetable(request, student_id):
         raise Http404("Student timetable does not exist")
 
     enrollment_records = EnrollmentRecord.objects.filter(timetable=student_timetable).all()
+    all_groups = [enr.group for enr in enrollment_records]
+    groups = [sorted(list(filter(lambda group: group.day_of_week == day, all_groups)), key=lambda group: group.start_time) for day in DayOfWeek]
 
     context = {
-        'groups': [enr.group for enr in enrollment_records],
+        'groups': groups,
         'student_id': student_id
     }
 
@@ -43,7 +45,6 @@ def group_details(request, group_code: str):
     }
 
     return render(request, 'assistant/group_details.html', context)
-
 
 
 def get_groups():
@@ -91,7 +92,6 @@ class SearchForm(forms.Form):
 
 
 def search_groups(request, student_id):
-
     if not Student.objects.filter(id=student_id).exists():
         return Http404(
             f'Student with id {student_id} does not exist'
@@ -117,7 +117,6 @@ def as_string(value: Union[str, None]):
 
 
 def get_filtered_groups(form: SearchForm) -> List[Group]:
-
     date_from = datetime.datetime.strptime(form['date_from'].value(), '%H:%M')
     date_to = datetime.datetime.strptime(form['date_to'].value(), '%H:%M')
 
