@@ -7,9 +7,8 @@ from django.http import Http404
 from django.shortcuts import render
 
 from assistant.enrollment.groupshandler import GroupsHandler
-from assistant.models import DayOfWeek, Course, Lecturing, Student
-
-from assistant.models import Timetable, EnrollmentRecord, Group, Teacher
+from assistant.models import (DayOfWeek, Course, Lecturing, Student, Timetable,
+                              EnrollmentRecord, Group, Teacher)
 
 
 def timetable(request, student_id):
@@ -97,20 +96,18 @@ def search_groups(request, student_id):
         return Http404(
             f'Student with id {student_id} does not exist'
         )
+    form = SearchForm(request.POST or None)
 
-    if request.method == 'POST':
-        form = SearchForm(request.POST)
-        if form.is_valid():
-            context = {
-                'groups': get_filtered_groups(form),
-                'student_id': student_id
-            }
-            return render(request, 'assistant/groups.html', context)
-        else:
-            return render(request, 'assistant/form_error.html', {'form': form})
+    context = {
+        'form': SearchForm(),
+        'errors': form.errors
+    }
 
-    # GET request
-    return render(request, 'assistant/search_groups.html', {'form': SearchForm()})
+    if request.method == 'POST' and form.is_valid():
+        context['groups'] = get_filtered_groups(form)
+        context['student_id'] = student_id
+
+    return render(request, 'assistant/search_groups.html', context)
 
 
 def as_string(value: Union[str, None]):
