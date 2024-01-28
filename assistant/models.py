@@ -92,7 +92,7 @@ class Timetable(models.Model):
     UniqueConstraint(fields=['enrollment_edition', 'student'], name='timetable_primary_keys')
 
     def __str__(self):
-        return f"Timetable(student_id={self.student})"
+        return f"Timetable(id = {self.id}, student_id={self.student}, enrollment_edition={self.enrollment_edition})"
 
     def __repr__(self):
         return self.__str__()
@@ -133,6 +133,16 @@ class DayOfWeek(models.TextChoices):
     SATURDAY = "sat", _("Saturday")
     SUNDAY = "sun", _("Sunday")
 
+    @classmethod
+    def lt(cls, day1, day2):
+        days_of_week = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+        return days_of_week.index(day1) < days_of_week.index(day2)
+
+    @classmethod
+    def gt(cls, day1, day2):
+        days_of_week = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+        return days_of_week.index(day1) > days_of_week.index(day2)
+
 
 class Course(models.Model):
     code = models.CharField(max_length=20, primary_key=True)
@@ -170,16 +180,22 @@ class Group(models.Model):
         return int((self.end_time - self.start_time).total_seconds() / 60.0)
 
     def __lt__(self, other):
-        return self.start_time < other.start_time if self.day == other.day else self.day.value < other.day.value
+        return self.start_time < other.start_time if self.day_of_week == other.day_of_week\
+            else DayOfWeek.lt(self.day_of_week, other.day_of_week)
 
     def __gt__(self, other):
-        return self.start_time > other.start_time if self.day == other.day else self.day.value > other.day.value
+        return self.start_time > other.start_time if self.day_of_week == other.day_of_week\
+            else DayOfWeek.gt(self.day_of_week, other.day_of_week)
 
     def occurs_even(self):
         return self.week_type == WeekType.EVEN_WEEK or self.week_type == WeekType.EVERY_WEEK
 
     def occurs_odd(self):
         return self.week_type == WeekType.ODD_WEEK or self.week_type == WeekType.EVERY_WEEK
+
+    def intervenes_with(self, other):
+        return self.start_time < other.end_time and self.end_time > other.start_time
+
 
 
 class Lecturing(models.Model):
