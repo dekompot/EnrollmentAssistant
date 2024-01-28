@@ -2,10 +2,12 @@ from django.shortcuts import render
 
 from assistant.enrollment.enrollment import Enrollment
 from assistant.models import Student, Group
+from assistant.users import check_student_permission
 
 
-def register(request, student_id, group_code):
-    enrollment = Enrollment('CBE-2021-inz')
+@check_student_permission('CBE-2021-inz')
+def register(request, field_of_studies, student_id, group_code):
+    enrollment = Enrollment(field_of_studies)
 
     student = Student.objects.get(id=student_id)
     group = Group.objects.get(code=group_code)
@@ -18,8 +20,9 @@ def register(request, student_id, group_code):
     return render(request, 'assistant/register_result.html', context)
 
 
-def unregister(request, student_id, group_code):
-    enrollment = Enrollment('CBE-2021-inz')
+@check_student_permission('CBE-2021-inz')
+def unregister(request, field_of_studies, student_id, group_code):
+    enrollment = Enrollment(field_of_studies)
 
     student = Student.objects.get(id=student_id)
     group = Group.objects.get(code=group_code)
