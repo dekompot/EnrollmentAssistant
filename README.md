@@ -13,3 +13,8 @@ Jak ja to widzę:
 TESTOWE URL:
 http://127.0.0.1:8000/assistant/enrollment/search/266640/
 http://127.0.0.1:8000/assistant/timetable/266640/
+
+Co mozna dodac:
+https://packaging.python.org/en/latest/guides/writing-pyproject-toml/
+https://pre-commit.com/
+https://docs.astral.sh/ruff/
