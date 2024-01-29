@@ -51,6 +51,10 @@ nav a {
     color: white;
 }
 
+nav li:hover  {
+    background: linear-gradient(90deg, #a1cbff 0%, #b05eff 100%);
+}
+
 nav a:hover {
     color: black;
 }
@@ -91,6 +95,13 @@ h1{
     line-height: normal;
     letter-spacing: -0.025rem;
 }
+
+.buttons a:hover{
+    color: black;
+    background: linear-gradient(90deg, #a1cbff 0%, #b05eff 100%);
+}
+
+
 .group .code{
  color: #000;
 font-family: "Work Sans", sans-serif;
