@@ -9,6 +9,17 @@
     <title>{% block title %}My Site{% endblock %}</title>
 </head>
 <body>
-    {% block content %}{% endblock %}
+
+    <nav>
+        <ul>
+            <li><a href="{% url 'queue' %}">Queue</a></li>
+            <li><a href="{% url 'timetable' '266640' %}">Timetable</a></li>
+        </ul>
+    </nav>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+
 </body>
 </html>

@@ -2,7 +2,13 @@
 {% block title %}Timetable{% endblock %}
 {% block content %}
     <h1>Your timetable</h1>
+
     <table class="timetable">
+    <tr>
+        <div class= "search-button">
+            <a href="{% url 'search_groups' student_id %}">Search groups</a>
+        </div>
+    </tr>
     {% for groups_given_day in groups %}
         <tr>
         {% for group in groups_given_day %}

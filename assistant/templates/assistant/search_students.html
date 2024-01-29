@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}Search filter{% endblock %}
+{% block content %}
+    {% include "shared/search_form.html" %}
+    {% if errors %}
+        {% include "shared/form_error.html" %}
+    {% elif students %}
+        {% include "queue/students.html" %}
+    {% else %}
+        <p>No students are available.</p>
+    {% endif  %}
+{% endblock %}

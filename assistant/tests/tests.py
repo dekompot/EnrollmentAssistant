@@ -7,6 +7,7 @@ from assistant.enrollment.enrollment import Enrollment
 from parsing.parse_json import load_grid_from_json
 from assistant.models import *
 
+FIELD_OF_STUDIES = 'CBE-2021-inz'
 
 class TestDayOfWeek(TestCase):
 

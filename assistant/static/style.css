@@ -1,6 +1,64 @@
 body{
     font-family: "Work Sans", sans-serif;
 }
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.search-button a {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    border-radius: 3.25rem;
+border: 1px solid #7879F1;
+box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    color: #000;
+font-family: "Work Sans", sans-serif;
+    padding: 1rem;
+    margin: 1rem;
+font-size: 1.25rem;
+font-style: normal;
+    text-decoration: none;
+font-weight: 700;
+line-height: normal;
+letter-spacing: -0.025rem;
+}
+
+
+nav li {
+    border-radius: 3.25rem;
+    margin-right: 2rem;
+    padding: 0.5rem 2rem 0.5rem 2rem;
+    background: linear-gradient(90deg, #0063BE 0%, #0E0E2C 100%);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    font-family: "Work Sans", sans-serif;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: -0.025rem;]
+}
+
+nav a {
+    display: block;
+    padding: 15px;
+    text-decoration: none;
+    color: white;
+}
+
+nav a:hover {
+    color: white;
+    background-color: #555;
+}
+
+#content {
+    padding: 20px;
+}
 h1{
     height: 5.125rem;
     color: #000;
@@ -15,7 +73,7 @@ h1{
     background: linear-gradient(90deg, darkred, black);
     color: #FFF;
 }
-.buttons{
+.buttons a{
     margin: 1rem;
     border-radius: 2rem;
     background: linear-gradient(90deg, #7879F1 -0.15%, #383985 100%);
