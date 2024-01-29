@@ -12,6 +12,16 @@ from assistant.models import (DayOfWeek, Course, Lecturing, Student, Timetable,
 
 
 def timetable(request, student_id):
+    """
+    Renders the timetable view for a specific student.
+
+    Parameters:
+    - request: The HTTP request object.
+    - student_id (str): The ID of the student.
+
+    Returns:
+    - render: The rendered timetable view.
+    """
     try:
         student_timetable = Timetable.objects.get(student_id=student_id)
     except Timetable.DoesNotExist:
@@ -30,6 +40,16 @@ def timetable(request, student_id):
 
 
 def group_details(request, group_code: str):
+    """
+    Renders the group details view for a specific group.
+
+    Parameters:
+    - request: The HTTP request object.
+    - group_code (str): The code of the group.
+
+    Returns:
+    - render: The rendered group details view.
+    """
     try:
         group = Group.objects.get(code__exact=group_code)
     except Group.DoesNotExist:
@@ -48,26 +68,67 @@ def group_details(request, group_code: str):
 
 
 def get_groups():
+    """
+    Retrieves a list of groups for form choices.
+
+    Returns:
+    - List[Tuple[str, str]]: List of tuples representing group choices.
+    """
     groups = Group.objects.all()
     return [('', '')] + [(group.code, group.code) for group in groups]
 
 
 def get_courses():
+    """
+       Retrieves a list of courses for form choices.
+
+       Returns:
+       - List[Tuple[str, str]]: List of tuples representing course choices.
+       """
     courses = Course.objects.all()
     return [('', '')] + [(course.code, course.code) for course in courses]
 
 
 def get_teachers():
+    """
+        Retrieves a list of teachers for form choices.
+
+        Returns:
+        - List[Tuple[str, str]]: List of tuples representing teacher choices.
+        """
     teachers = Teacher.objects.all()
     return [('', '')] + [(teacher.name, teacher.name) for teacher in teachers]
 
 
 def get_days_of_week():
+    """
+        Retrieves a list of days of the week for form choices.
+
+        Returns:
+        - List[Tuple[str, str]]: List of tuples representing day of the week choices.
+        """
     days_of_week = DayOfWeek.choices
     return [('', '')] + days_of_week
 
 
 class SearchForm(forms.Form):
+    """
+    Form for searching groups based on specified criteria.
+    All entries are optional to fill in. Provided default
+    values return all groups for the given enrollment edition
+
+    Attributes:
+    - group_code (ChoiceField): The choice field for selecting group codes.
+    - course_code (ChoiceField): The choice field for selecting course codes.
+    - teacher (ChoiceField): The choice field for selecting teachers.
+    - date_from (DateTimeField): The date and time field for specifying the starting date and time.
+    - date_to (DateTimeField): The date and time field for specifying the ending date and time.
+    - day_of_week (ChoiceField): The choice field for selecting days of the week.
+
+    Methods:
+    - is_valid(): Checks if the form is valid and validates date_from and date_to.
+
+    """
     group_code = ChoiceField(widget=Select, choices=get_groups, required=False)
     course_code = ChoiceField(widget=Select, choices=get_courses, required=False)
     teacher = ChoiceField(widget=Select, choices=get_teachers, required=False)
@@ -76,6 +137,13 @@ class SearchForm(forms.Form):
     day_of_week = ChoiceField(widget=Select, choices=get_days_of_week, required=False)
 
     def is_valid(self):
+        """
+        Overrides the default is_valid method to validate date_from and date_to.
+
+        Returns:
+        - bool: True if the form is valid, False otherwise.
+
+        """
         is_valid = super().is_valid()
 
         if not is_valid:
@@ -92,6 +160,16 @@ class SearchForm(forms.Form):
 
 
 def search_groups(request, student_id):
+    """
+    Renders the search groups view.
+
+    Parameters:
+    - request: The HTTP request object.
+    - student_id (str): The ID of the student.
+
+    Returns:
+    - render: The rendered search groups view.
+    """
     if not Student.objects.filter(id=student_id).exists():
         return Http404(
             f'Student with id {student_id} does not exist'
@@ -111,12 +189,32 @@ def search_groups(request, student_id):
 
 
 def as_string(value: Union[str, None]):
+    """
+        Converts a value to a string or an empty string if the value is None.
+
+        Parameters:
+        - value (Union[str, None]): The value to be converted.
+
+        Returns:
+        - str: The string representation of the value or an empty string if the value is None.
+
+        """
     if value is None:
         value = ''
     return value
 
 
 def get_filtered_groups(form: SearchForm) -> List[Group]:
+    """
+        Retrieves filtered groups based on the search form criteria.
+
+        Parameters:
+        - form (SearchForm): The search form containing filtering criteria.
+
+        Returns:
+        - List[Group]: The list of filtered groups.
+
+        """
     date_from = datetime.datetime.strptime(form['date_from'].value(), '%H:%M')
     date_to = datetime.datetime.strptime(form['date_to'].value(), '%H:%M')
 
