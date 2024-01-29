@@ -6,6 +6,8 @@ from assistant.models import EnrollmentEdition, EnrollmentQueue, EnrollmentPermi
 def set_early_permissions(student_id, new_early_permission: bool):
     enrollment_edition = EnrollmentEdition.objects.get(id__exact='summer-2022/2023')
     queue = EnrollmentQueue.objects.get(enrollment_edition=enrollment_edition)
+    if not contains(queue, student_id):
+        add(enrollment_edition.id, student_id)
     permissions = EnrollmentPermission.objects.get(queue=queue, student=student_id)
     permissions.is_permitted_earlier = new_early_permission
     permissions.save()
@@ -14,16 +16,23 @@ def set_early_permissions(student_id, new_early_permission: bool):
 def add(enrollment_id, student_id):
     enrollment_edition = EnrollmentEdition.objects.get(id__exact=enrollment_id)
     queue = EnrollmentQueue.objects.get(enrollment_edition=enrollment_edition)
-    permission = EnrollmentPermission(queue=queue, student_id=student_id, date_from=datetime.now(),
+    if not contains(queue, student_id):
+        permission = EnrollmentPermission(queue=queue, student_id=student_id, date_from=datetime.now(),
                                       date_to=datetime.now())
-    permission.save()
+        permission.save()
 
 
 def remove(enrollment_id, student_id):
     enrollment_edition = EnrollmentEdition.objects.get(id__exact=enrollment_id)
     queue = EnrollmentQueue.objects.get(enrollment_edition=enrollment_edition)
-    permissions = EnrollmentPermission.objects.get(queue=queue, student=student_id)
-    permissions.delete()
+    if contains(queue, student_id):
+        permissions = EnrollmentPermission.objects.get(queue=queue, student=student_id)
+        permissions.delete()
+
+
+def contains(queue, student_id):
+    return EnrollmentPermission.objects.filter(queue=queue, student_id=student_id).count() == 1
+
 
 
 def get_queue(enrollment_id):
