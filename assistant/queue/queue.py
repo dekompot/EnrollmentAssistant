@@ -7,6 +7,8 @@ def set_early_permissions(student_id, new_early_permission: bool):
     enrollment_edition = EnrollmentEdition.objects.get(id__exact='summer-2022/2023')
     queue = EnrollmentQueue.objects.get(enrollment_edition=enrollment_edition)
     if not contains(queue, student_id):
+        if not new_early_permission:
+            return
         add(enrollment_edition.id, student_id)
     permissions = EnrollmentPermission.objects.get(queue=queue, student=student_id)
     permissions.is_permitted_earlier = new_early_permission

@@ -52,8 +52,7 @@ nav a {
 }
 
 nav a:hover {
-    color: white;
-    background-color: #555;
+    color: black;
 }
 
 #content {
@@ -163,7 +162,6 @@ letter-spacing: -0.03rem;
     text-decoration: none;
     display: inline-flex;
     height: 1rem;
-    text-decoration: none;
     flex-direction: column;
     justify-content: center;
     margin: 1rem 0.25rem 0.25rem;
